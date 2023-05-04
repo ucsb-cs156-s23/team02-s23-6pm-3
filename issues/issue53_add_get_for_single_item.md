@@ -1,9 +1,9 @@
- Add `GET` (show) endpoint for a single record in Recipie table
+ Add `GET` (show) endpoint for a single record in Recipe table
 
 # Acceptance Criteria:
 
-- [ ] In `RecipieController.java` there is code for an 
-      endpoint `GET /api/Recipie?id=123` endpoint 
+- [ ] In `RecipeController.java` there is code for an 
+      endpoint `GET /api/Recipe?id=123` endpoint 
       that returns the JSON of the database record with id 123 if it
       exists, or a 400 and the error message `id 123 not found` if it
       does not.
@@ -12,8 +12,8 @@
 - [ ] The endpoint works as expected on localhost.
 - [ ] The endpoint works as expected when deployed to Dokku.
 - [ ] There is full test coverage (Jacoco) for the new code in 
-      `RecipieController.java`
+      `RecipeController.java`
 - [ ] There is full mutation test coverage (Pitest) for new code in
-      `RecipieController.java`
+      `RecipeController.java`
 
 

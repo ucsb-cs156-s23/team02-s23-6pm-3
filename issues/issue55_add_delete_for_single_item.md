@@ -1,9 +1,9 @@
- Add `DELETE` endpoint for a specific record in Recipie table.
+ Add `DELETE` endpoint for a specific record in Recipe table.
 
 # Acceptance Criteria:
 
-- [ ] In `RecipieController.java` there is code for an 
-      endpoint `DELETE /api/Recipie?id=123` endpoint 
+- [ ] In `RecipeController.java` there is code for an 
+      endpoint `DELETE /api/Recipe?id=123` endpoint 
       that deletes the record if it exists, and returns 200 (ok) and 
       the text `record 123 deleted`, or returns 404 (Not Found) and
       the text `record 123 not found` if it does not.
@@ -12,8 +12,8 @@
 - [ ] The endpoint works as expected on localhost.
 - [ ] The endpoint works as expected when deployed to Dokku.
 - [ ] There is full test coverage (Jacoco) for the new code in 
-      `RecipieController.java`
+      `RecipeController.java`
 - [ ] There is full mutation test coverage (Pitest) for new code in
-      `RecipieController.java`
+      `RecipeController.java`
 
 
