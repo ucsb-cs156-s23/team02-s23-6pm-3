@@ -1,7 +1,9 @@
 # STARTER-team02
 
+### Production
 https://team02-prod.dokku-07.cs.ucsb.edu/
 
+### QA
 https://team02-qa.dokku-07.cs.ucsb.edu/
 
 
