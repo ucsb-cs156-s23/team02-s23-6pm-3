@@ -2,6 +2,8 @@ package edu.ucsb.cs156.example.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +17,10 @@ import lombok.Builder;
 @Entity(name = "article")
 public class Article {
   @Id
-  private String code;
-  private String name;
-  private boolean hasSackMeal;
-  private boolean hasTakeOutMeal;
-  private boolean hasDiningCam;
-  private Double latitude;
-  private Double longitude;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
+  private String title;
+  private String image;
+  private String content;
+  private Double duration;
 }
