@@ -3,8 +3,8 @@ package edu.ucsb.cs156.example.controllers;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import edu.ucsb.cs156.example.ControllerTestCase;
-import edu.ucsb.cs156.example.entities.Article;
-import edu.ucsb.cs156.example.repositories.ArticleRepository;
+import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
+import java.time.LocalDateTime;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +37,7 @@ import static org.mockito.Mockito.when;
 public class ArticlesControllerTests extends ControllerTestCase {
 
         @MockBean
-        ArticleRepository articleRepository;
+        ArticlesRepository articlesRepository;
 
         @MockBean
         UserRepository userRepository;
@@ -82,16 +84,13 @@ public class ArticlesControllerTests extends ControllerTestCase {
         @WithMockUser(roles = { "USER" })
         @Test
         public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
-
-                // arrange
-
-                Article article = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content")
+                Articles articles = Articles.builder()
+                                .title("Title1")
+                                .image("Image1")
+                                .content("Content1")
                                 .build();
 
-                when(articleRepository.findById(eq(7L))).thenReturn(Optional.of(article));
+                when(articlesRepository.findById(eq(7L))).thenReturn(Optional.of(articles));
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
@@ -99,8 +98,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(articleRepository, times(1)).findById(eq(7L));
-                String expectedJson = mapper.writeValueAsString(article);
+                verify(articlesRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(articles);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -111,7 +110,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                when(articleRepository.findById(eq(7L))).thenReturn(Optional.empty());
+                when(articlesRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
@@ -119,10 +118,10 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(articleRepository, times(1)).findById(eq(7L));
+                verify(articlesRepository, times(1)).findById(eq(7L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("Article with id 7 not found", json.get("message"));
+                assertEquals("Articles with id 7 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "USER" })
@@ -130,24 +129,22 @@ public class ArticlesControllerTests extends ControllerTestCase {
         public void logged_in_user_can_get_all_articles() throws Exception {
 
                 // arrange
-
-                Article article1 = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content1")
+                Articles articles1 = Articles.builder()
+                                .title("Title1")
+                                .image("Image1")
+                                .content("Content1")
                                 .build();
 
-
-                Article article2 = Article.builder()
-                                .title("lastDayOfClasses")
-                                .image("image1")
-                                .content("content2")
+                Articles articles2 = Articles.builder()
+                                .title("Title2")
+                                .image("Image2")
+                                .content("Content2")
                                 .build();
 
-                ArrayList<Article> expectedDates = new ArrayList<>();
-                expectedDates.addAll(Arrays.asList(article1, article2));
+                ArrayList<Articles> expectedDates = new ArrayList<>();
+                expectedDates.addAll(Arrays.asList(articles1, articles2));
 
-                when(articleRepository.findAll()).thenReturn(expectedDates);
+                when(articlesRepository.findAll()).thenReturn(expectedDates);
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/articles/all"))
@@ -155,7 +152,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(articleRepository, times(1)).findAll();
+                verify(articlesRepository, times(1)).findAll();
                 String expectedJson = mapper.writeValueAsString(expectedDates);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -163,26 +160,25 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void an_admin_user_can_post_a_new_article() throws Exception {
+        public void an_admin_user_can_post_a_new_articles() throws Exception {
                 // arrange
-
-                Article article1 = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content1")
+                Articles articles1 = Articles.builder()
+                                .title("Title1")
+                                .image("Image1")
+                                .content("Content1")
                                 .build();
 
-                when(articleRepository.save(eq(article1))).thenReturn(article1);
+                when(articlesRepository.save(eq(articles1))).thenReturn(articles1);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/articles/post?title=title1&image=image1&content=content1")
+                                post("/api/articles/post?title=Title1&image=Image1&content=Content1")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(articleRepository, times(1)).save(article1);
-                String expectedJson = mapper.writeValueAsString(article1);
+                verify(articlesRepository, times(1)).save(articles1);
+                String expectedJson = mapper.writeValueAsString(articles1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -191,14 +187,13 @@ public class ArticlesControllerTests extends ControllerTestCase {
         @Test
         public void admin_can_delete_a_date() throws Exception {
                 // arrange
-
-                Article article1 = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content1")
+                Articles articles1 = Articles.builder()
+                                .title("Title1")
+                                .image("Image1")
+                                .content("Content1")
                                 .build();
 
-                when(articleRepository.findById(eq(15L))).thenReturn(Optional.of(article1));
+                when(articlesRepository.findById(eq(15L))).thenReturn(Optional.of(articles1));
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -207,20 +202,20 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(articleRepository, times(1)).findById(15L);
-                verify(articleRepository, times(1)).delete(any());
+                verify(articlesRepository, times(1)).findById(15L);
+                verify(articlesRepository, times(1)).delete(any());
 
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Article with id 15 deleted", json.get("message"));
+                assertEquals("Articles with id 15 deleted", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_tries_to_delete_non_existant_article_and_gets_right_error_message()
+        public void admin_tries_to_delete_non_existant_articles_and_gets_right_error_message()
                         throws Exception {
                 // arrange
 
-                when(articleRepository.findById(eq(15L))).thenReturn(Optional.empty());
+                when(articlesRepository.findById(eq(15L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -229,31 +224,30 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(articleRepository, times(1)).findById(15L);
+                verify(articlesRepository, times(1)).findById(15L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Article with id 15 not found", json.get("message"));
+                assertEquals("Articles with id 15 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_can_edit_an_existing_article() throws Exception {
+        public void admin_can_edit_an_existing_articles() throws Exception {
                 // arrange
-
-                Article articleOrig = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content1")
+                Articles articlesOrig = Articles.builder()
+                                .title("Title1")
+                                .image("Image1")
+                                .content("Content1")
                                 .build();
 
-                Article articleEdited = Article.builder()
-                                .title("firstDayOfFestivus")
-                                .image("20232")
-                                .content("content2")
+                Articles articlesEdited = Articles.builder()
+                                .title("Asia")
+                                .image("Image1ro")
+                                .content("Asiatotoro")
                                 .build();
 
-                String requestBody = mapper.writeValueAsString(articleEdited);
+                String requestBody = mapper.writeValueAsString(articlesEdited);
 
-                when(articleRepository.findById(eq(67L))).thenReturn(Optional.of(articleOrig));
+                when(articlesRepository.findById(eq(67L))).thenReturn(Optional.of(articlesOrig));
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -265,26 +259,26 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(articleRepository, times(1)).findById(67L);
-                verify(articleRepository, times(1)).save(articleEdited); // should be saved with correct user
+                verify(articlesRepository, times(1)).findById(67L);
+                verify(articlesRepository, times(1)).save(articlesEdited); // should be saved with correct user
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(requestBody, responseString);
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_cannot_edit_article_that_does_not_exist() throws Exception {
+        public void admin_cannot_edit_articles_that_does_not_exist() throws Exception {
                 // arrange
 
-                Article ucsbEditedDate = Article.builder()
-                                .title("title1")
-                                .image("image1")
-                                .content("content1")
+                Articles articlesEdited = Articles.builder()
+                                .title("Asia")
+                                .image("Image1ro")
+                                .content("Asiatotoro")
                                 .build();
 
-                String requestBody = mapper.writeValueAsString(ucsbEditedDate);
+                String requestBody = mapper.writeValueAsString(articlesEdited);
 
-                when(articleRepository.findById(eq(67L))).thenReturn(Optional.empty());
+                when(articlesRepository.findById(eq(67L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -296,9 +290,9 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(articleRepository, times(1)).findById(67L);
+                verify(articlesRepository, times(1)).findById(67L);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Article with id 67 not found", json.get("message"));
+                assertEquals("Articles with id 67 not found", json.get("message"));
 
         }
 }

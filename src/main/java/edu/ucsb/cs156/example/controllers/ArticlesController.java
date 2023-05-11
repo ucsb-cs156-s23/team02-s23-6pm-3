@@ -1,8 +1,8 @@
 package edu.ucsb.cs156.example.controllers;
 
-import edu.ucsb.cs156.example.entities.Article;
+import edu.ucsb.cs156.example.entities.Articles;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
-import edu.ucsb.cs156.example.repositories.ArticleRepository;
+import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,80 +27,78 @@ import javax.validation.Valid;
 @Api(description = "Articles")
 @RequestMapping("/api/articles")
 @RestController
-@Slf4j
 public class ArticlesController extends ApiController {
 
     @Autowired
-    ArticleRepository articleRepository;
+    ArticlesRepository articlesRepository;
 
-    @ApiOperation(value = "List all articles")
+    @ApiOperation(value = "List all articless")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<Article> allArticles() {
-        Iterable<Article>articles = articleRepository.findAll();
+    public Iterable<Articles> allArticles() {
+        Iterable<Articles> dates = articlesRepository.findAll();
+        return dates;
+    }
+
+    @ApiOperation(value = "Get a single articles")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public Articles getById(
+            @ApiParam("id") @RequestParam Long id) {
+        Articles articles = articlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
         return articles;
     }
 
-    @ApiOperation(value = "Get a single article")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("")
-    public Article getById(
-            @ApiParam("id") @RequestParam Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
-
-        return article;
-    }
-
-    @ApiOperation(value = "Create a new article")
+    @ApiOperation(value = "Create a new articles")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
-    public Article postArticle(
+    public Articles postArticles(
             @ApiParam("title") @RequestParam String title,
             @ApiParam("image") @RequestParam String image,
-            @ApiParam("content") @RequestParam String content)
+            @ApiParam("content") @RequestParam String content
+            )
             throws JsonProcessingException {
 
-        log.info("content={}", content);
+        Articles articles = new Articles();
+        articles.setTitle(title);
+        articles.setImage(image);
+        articles.setContent(content);
 
-        Article article = new Article();
-        article.setTitle(title);
-        article.setImage(image);
-        article.setContent(content);
+        Articles savedArticles = articlesRepository.save(articles);
 
-        Article savedArticle = articleRepository.save(article);
-
-        return savedArticle;
+        return savedArticles;
     }
 
-    @ApiOperation(value = "Delete a Article")
+    @ApiOperation(value = "Delete a Articles")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
-    public Object deleteArticle(
+    public Object deleteArticles(
             @ApiParam("id") @RequestParam Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
+        Articles articles = articlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
 
-        articleRepository.delete(article);
-        return genericMessage("Article with id %s deleted".formatted(id));
+        articlesRepository.delete(articles);
+        return genericMessage("Articles with id %s deleted".formatted(id));
     }
 
-    @ApiOperation(value = "Update a single article")
+    @ApiOperation(value = "Update a single articles")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    public Article updateArticle(
+    public Articles updateArticles(
             @ApiParam("id") @RequestParam Long id,
-            @RequestBody @Valid Article incoming) {
+            @RequestBody @Valid Articles incoming) {
 
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
+        Articles articles = articlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
 
-        article.setTitle(incoming.getTitle());
-        article.setImage(incoming.getImage());
-        article.setContent(incoming.getContent());
+        articles.setTitle(incoming.getTitle());
+        articles.setImage(incoming.getImage());
+        articles.setContent(incoming.getContent());
 
-        articleRepository.save(article);
+        articlesRepository.save(articles);
 
-        return article;
+        return articles;
     }
 }

@@ -14,13 +14,12 @@ import lombok.Builder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "article")
-public class Article {
+@Entity(name = "articles")
+public class Articles {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String title;
   private String image;
   private String content;
-  private Double duration;
 }
