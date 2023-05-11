@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArticleRepository extends CrudRepository<Article, Long> {
-  Iterable<Article> findAllByImage(String image);
+  Iterable<Article> findAllByTitle(String title);
 }
