@@ -11,10 +11,6 @@ import UCSBDatesIndexPage from "main/pages/UCSBDates/UCSBDatesIndexPage";
 import UCSBDatesCreatePage from "main/pages/UCSBDates/UCSBDatesCreatePage";
 import UCSBDatesEditPage from "main/pages/UCSBDates/UCSBDatesEditPage";
 
-import ArticlesIndexPage from "main/pages/Articles/ArticlesIndexPage";
-import ArticlesCreatePage from "main/pages/Articles/ArticlesCreatePage";
-import ArticlesEditPage from "main/pages/Articles/ArticlesEditPage";
-
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -79,16 +75,6 @@ function App() {
                             exact
                             path="/ucsbdates/create"
                             element={<UCSBDatesCreatePage />}
-                        />
-                        <Route
-                            exact
-                            path="/articles/create"
-                            element={<ArticlesCreatePage />}
-                        />
-                        <Route
-                            exact
-                            path="/articles/create"
-                            element={<ArticlesCreatePage />}
                         />
                     </>
                 )}
