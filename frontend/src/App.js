@@ -57,11 +57,6 @@ function App() {
                             path="/ucsbdates/list"
                             element={<UCSBDatesIndexPage />}
                         />
-                        <Route
-                            exact
-                            path="/articles/list"
-                            element={<ArticlesIndexPage />}
-                        />
                     </>
                 )}
                 {hasRole(currentUser, "ROLE_ADMIN") && (
