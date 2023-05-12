@@ -57,7 +57,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/books?code=Dracula"))
+                mockMvc.perform(get("/api/books?title=Dracula"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 
@@ -95,7 +95,7 @@ public class BooksControllerTests extends ControllerTestCase {
                 when(booksRepository.findById(eq("lotr"))).thenReturn(Optional.of(book));
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/books?code=lotr"))
+                MvcResult response = mockMvc.perform(get("/api/books?title=lotr"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
@@ -115,7 +115,7 @@ public class BooksControllerTests extends ControllerTestCase {
                 when(booksRepository.findById(eq("potato"))).thenReturn(Optional.empty());
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/books?code=potato"))
+                MvcResult response = mockMvc.perform(get("/api/books?title=potato"))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
@@ -147,7 +147,7 @@ public class BooksControllerTests extends ControllerTestCase {
                                 .build();
 
                 ArrayList<Books> expectedBooks = new ArrayList<>();
-                expectedBooks.addAll(Arrays.asList(lotr, dlg));
+                expectedBooks.addAll(Arrays.asList(lotr, jeeves));
 
                 when(booksRepository.findAll()).thenReturn(expectedBooks);
 
@@ -165,12 +165,12 @@ public class BooksControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void an_admin_user_can_post_a_new_commons() throws Exception {
+        public void an_admin_user_can_post_a_new_book() throws Exception {
                 // arrange
 
                 Books pimpernel = Books.builder()
-                                .name("The Scarlet Pimpernel")
-                                .code("pimpernel")
+                                .name("The-Scarlet-Pimpernel")
+                                .title("pimpernel")
                                 .genre("romance")
                                 .setting("France")
                                 .build();
@@ -179,7 +179,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/books/post?name=The-Scarlet-Pimpernel&code=pimpernel&genre=romance&setting=France")
+                                post("/api/books/post?name=The-Scarlet-Pimpernel&title=pimpernel&genre=romance&setting=France")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -197,7 +197,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 Books spare = Books.builder()
                                 .name("Spare")
-                                .code("spare")
+                                .title("spare")
                                 .genre("autobiography")
                                 .setting("Britain")
                                 .build();
@@ -206,7 +206,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/books?code=spare")
+                                delete("/api/books?title=spare")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -228,7 +228,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/books?code=potato")
+                                delete("/api/books?title=potato")
                                                 .with(csrf()))
                                 .andExpect(status().isNotFound()).andReturn();
 
@@ -240,7 +240,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_can_edit_an_existing_commons() throws Exception {
+        public void admin_can_edit_an_existing_book() throws Exception {
                 // arrange
 
                 Books lotrOrig = Books.builder()
@@ -251,7 +251,7 @@ public class BooksControllerTests extends ControllerTestCase {
                                 .build();
                 Books lotrEdited = Books.builder()
                                 .name("The Fellowship of the Ring")
-                                .code("lotr")
+                                .title("lotr")
                                 .genre("fantasy")
                                 .setting("The Shire")
                                 .build();
@@ -262,7 +262,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/books?code=lotr")
+                                put("/api/books?title=lotr")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
@@ -278,13 +278,13 @@ public class BooksControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_cannot_edit_commons_that_does_not_exist() throws Exception {
+        public void admin_cannot_edit_book_that_does_not_exist() throws Exception {
                 // arrange
 
                 Books editedBook = Books.builder()
                                 .name("potato")
-                                .code("potato")
-                                .genre(root)
+                                .title("potato")
+                                .genre("root")
                                 .setting("Gaffer's Garden")
                                 .build();
 
@@ -294,7 +294,7 @@ public class BooksControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/books?code=potato")
+                                put("/api/books?title=potato")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
