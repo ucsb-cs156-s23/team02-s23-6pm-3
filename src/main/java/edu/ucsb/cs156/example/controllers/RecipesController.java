@@ -6,8 +6,9 @@ import edu.ucsb.cs156.example.repositories.RecipesRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 @Api(description = "Recipes")
 @RequestMapping("/api/recipes")
 @RestController
+@Slf4j
 public class RecipesController extends ApiController {
 
     @Autowired
@@ -35,8 +37,8 @@ public class RecipesController extends ApiController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<Recipes> allRecipes() {
-        Iterable<Recipes> recipes = recipesRepository.findAll();
-        return recipes;
+        Iterable<Recipes> recipe = recipesRepository.findAll();
+        return recipe;
     }
 
     @ApiOperation(value = "Get a single recipe")
@@ -44,7 +46,7 @@ public class RecipesController extends ApiController {
     @GetMapping("")
     public Recipes getById(
             @ApiParam("id") @RequestParam Long id) {
-        Recipes recipes = recipesRepository.findById(id)
+        Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
         return recipes;
@@ -62,48 +64,45 @@ public class RecipesController extends ApiController {
             )
             throws JsonProcessingException {
 
-        Recipes recipes = new Recipes();
-        recipes.setName(name);
-        recipes.setMealType(mealtype);
-        recipes.setPrepTime(preptime);
-        recipes.setCookTime(cooktime);
-        recipes.setTotalCalories(totalcalories);
+        Recipes recipe = new Recipes();
+        recipe.setName(name);
+        recipe.setMealType(mealtype);
+        recipe.setPrepTime(preptime);
+        recipe.setCookTime(cooktime);
+        recipe.setTotalCalories(totalcalories);
 
-        Recipes savedRecipes = recipesRepository.save(recipes);
+        Recipes savedRecipe = recipesRepository.save(recipe);
 
-        return savedRecipes;
+        return savedRecipe;
     }
 
     @ApiOperation(value = "Delete a Recipe")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
-    public Object deleteRecipes(
+    public Object deleteRecipe(
             @ApiParam("id") @RequestParam Long id) {
-        Recipes recipes = recipesRepository.findById(id)
+        Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
-        recipesRepository.delete(recipes);
+        recipesRepository.delete(recipe);
         return genericMessage("Recipes with id %s deleted".formatted(id));
     }
 
     @ApiOperation(value = "Update a single recipe")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    public Recipes updateRecipes(
+    public Recipes updateRecipe(
             @ApiParam("id") @RequestParam Long id,
             @RequestBody @Valid Recipes incoming) {
 
-        Recipes recipes = recipesRepository.findById(id)
+        Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
-        recipes.setName(incoming.getName());
-        recipes.setPrepTime(incoming.getPrepTime());
-        recipes.setMealType(incoming.getMealType());
-        recipes.setCookTime(incoming.getCookTime());
-        recipes.setTotalCalories(incoming.getTotalCalories());
-
-
-        recipesRepository.save(recipes);
-
-        return recipes;
+        // recipe.setName(incoming.getName());
+        // recipe.setPrepTime(incoming.getPrepTime());
+        // recipe.setMealType(incoming.getMealType());
+        // recipe.setCookTime(incoming.getCookTime());
+        // recipe.setTotalCalories(incoming.getTotalCalories());
+        recipesRepository.save(recipe);
+        return recipe;
     }
 }
