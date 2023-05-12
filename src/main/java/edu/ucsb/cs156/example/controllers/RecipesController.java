@@ -54,16 +54,16 @@ public class RecipesController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public Recipes postRecipes(
-        @ApiParam("name") @RequestParam String name,
-        @ApiParam("mealtype") @RequestParam String mealtype,
-        @ApiParam("preptime") @RequestParam String preptime,
-        @ApiParam("cooktime") @RequestParam String cooktime,
-        @ApiParam("totalcalories") @RequestParam String totalcalories
-        )
-        throws JsonProcessingException{
+            @ApiParam("name") @RequestParam String name,
+            @ApiParam("mealtype") @RequestParam String mealtype,
+            @ApiParam("preptime") @RequestParam String preptime,
+            @ApiParam("cooktime") @RequestParam String cooktime,
+            @ApiParam("totalcalories") @RequestParam String totalcalories
+            )
+            throws JsonProcessingException {
 
         Recipes recipe = new Recipes();
-        rest.setMealType(name);
+        rest.setName(name);
         rest.setMealType(mealtype);
         rest.setPrepTime(preptime);
         rest.setCookTime(cooktime);
