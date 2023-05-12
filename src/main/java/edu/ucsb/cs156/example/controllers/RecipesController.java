@@ -63,11 +63,11 @@ public class RecipesController extends ApiController {
             throws JsonProcessingException {
 
         Recipes recipe = new Recipes();
-        rest.setName(name);
-        rest.setMealType(mealtype);
-        rest.setPrepTime(preptime);
-        rest.setCookTime(cooktime);
-        rest.setTotalCalories(totalcalories);
+        recipe.setName(name);
+        recipe.setMealType(mealtype);
+        recipe.setPrepTime(preptime);
+        recipe.setCookTime(cooktime);
+        recipe.setTotalCalories(totalcalories);
 
         Recipes savedRecipe = recipesRepository.save(recipe);
 
