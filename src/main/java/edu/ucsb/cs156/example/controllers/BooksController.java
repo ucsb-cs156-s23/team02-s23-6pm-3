@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 
 @Api(description = "Books")
-@RequestMapping("/api/Books")
+@RequestMapping("/api/books")
 @RestController
 @Slf4j
 public class BooksController extends ApiController {
@@ -55,7 +55,7 @@ public class BooksController extends ApiController {
     @PostMapping("/post")
     public Books postBooks(
         @ApiParam("title") @RequestParam String title,
-        @ApiParam("author") @RequestParam String author,
+        @ApiParam("name") @RequestParam String name,
         @ApiParam("setting") @RequestParam String setting,
         @ApiParam("genre") @RequestParam String genre
         )
@@ -63,7 +63,7 @@ public class BooksController extends ApiController {
 
         Books book = new Books();
         book.setTitle(title);
-        book.setAuthor(author);
+        book.setName(name);
         book.setSetting(setting);
         book.setGenre(genre);
 
@@ -96,7 +96,7 @@ public class BooksController extends ApiController {
 
 
         book.setGenre(incoming.getGenre());  
-        book.setAuthor(incoming.getAuthor());
+        book.setName(incoming.getName());
         book.setSetting(incoming.getSetting());
 
 
