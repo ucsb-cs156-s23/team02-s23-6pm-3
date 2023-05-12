@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface BooksRepository extends CrudRepository<UCSBDiningCommons, String> {
- 
+public interface BooksRepository extends CrudRepository<Books, String> {
+  
 }
