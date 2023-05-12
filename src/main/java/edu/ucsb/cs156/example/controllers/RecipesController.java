@@ -25,7 +25,6 @@ import javax.validation.Valid;
 @Api(description = "Recipes")
 @RequestMapping("/api/recipes")
 @RestController
-@Slf4j
 public class RecipesController extends ApiController {
 
     @Autowired
@@ -44,7 +43,7 @@ public class RecipesController extends ApiController {
     @GetMapping("")
     public Recipes getById(
             @ApiParam("id") @RequestParam Long id) {
-        Recipe recipe = recipesRepository.findById(id)
+        Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
         return recipes;
@@ -78,7 +77,7 @@ public class RecipesController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
     public Object deleteRecipe(
-            @ApiParam("code") @RequestParam Long id) {
+            @ApiParam("id") @RequestParam Long id) {
         Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
@@ -94,7 +93,7 @@ public class RecipesController extends ApiController {
             @RequestBody @Valid Recipes incoming) {
 
         Recipes recipe = recipesRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Recipes.class, code));
+                .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
         recipe.setName(incoming.getName());
         recipe.setPrepTime(incoming.getPrepTime());
         recipe.setMealType(incoming.getMealType());
