@@ -44,7 +44,7 @@ public class BooksController extends ApiController {
     @GetMapping("")
     public Books getById(
             @ApiParam("title") @RequestParam String title) {
-        Books book = BooksRepository.findById(title)
+        Books book = booksRepository.findById(title)
                 .orElseThrow(() -> new EntityNotFoundException(Books.class, title));
 
         return book;
@@ -67,7 +67,7 @@ public class BooksController extends ApiController {
         book.setSetting(setting);
         book.setGenre(genre);
 
-        Books savedBook = BooksRepository.save(book);
+        Books savedBook = booksRepository.save(book);
 
         return savedBook;
     }
@@ -75,19 +75,19 @@ public class BooksController extends ApiController {
     @ApiOperation(value = "Delete a Book")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
-    public Object deleteRest(
+    public Object deleteBooks(
             @ApiParam("title") @RequestParam String title) {
-        Books book = BooksRepository.findById(title)
+        Books book = booksRepository.findById(title)
                 .orElseThrow(() -> new EntityNotFoundException(Books.class, title));
 
-        BooksRepository.delete(book);
+        booksRepository.delete(book);
         return genericMessage("Books with id %s deleted".formatted(title));
     }
 
     @ApiOperation(value = "Update a single book")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    public Books updateRest(
+    public Books updateBooks(
             @ApiParam("title") @RequestParam String title,
             @RequestBody @Valid Books incoming) {
 
