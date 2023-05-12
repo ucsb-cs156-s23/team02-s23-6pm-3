@@ -42,7 +42,7 @@ public class RecipesController extends ApiController {
     @ApiOperation(value = "Get a single recipe")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
-    public Restaurants getById(
+    public Recipes getById(
             @ApiParam("id") @RequestParam Long id) {
         Recipe recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
@@ -50,7 +50,7 @@ public class RecipesController extends ApiController {
         return recipes;
     }
 
-    @ApiOperation(value = "Create a new restaurant")
+    @ApiOperation(value = "Create a new recipe")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public Recipes postRecipes(
@@ -89,7 +89,7 @@ public class RecipesController extends ApiController {
     @ApiOperation(value = "Update a single recipe")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    public Restaurants updateRecipe(
+    public Recipes updateRecipe(
             @ApiParam("id") @RequestParam Long id,
             @RequestBody @Valid Recipes incoming) {
 
