@@ -57,7 +57,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/recipes?code=freebirds"))
+                mockMvc.perform(get("/api/recipes?id=gyudon"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 
@@ -85,11 +85,12 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                Recipes rest = Recipes.builder()
-                                .name("Freebirds")
-                                .code("freebirds")
-                                .cuisine("burritos")
-                                .location("Isla Vista")
+                Recipes okonomiyaki = Recipes.builder()
+                                .name("Okonomiyaki")
+                                .mealtype("snack")
+                                .preptime("15m")
+                                .cooktime("10m")
+                                .totalcalories("450")
                                 .build();
 
                 when(recipesRepository.findById(eq("Lasagna"))).thenReturn(Optional.of(rest));

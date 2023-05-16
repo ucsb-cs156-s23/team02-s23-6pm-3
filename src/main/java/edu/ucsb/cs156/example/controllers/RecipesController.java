@@ -97,11 +97,11 @@ public class RecipesController extends ApiController {
 
         Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
-        // recipe.setName(incoming.getName());
-        // recipe.setPrepTime(incoming.getPrepTime());
-        // recipe.setMealType(incoming.getMealType());
-        // recipe.setCookTime(incoming.getCookTime());
-        // recipe.setTotalCalories(incoming.getTotalCalories());
+        recipe.setName(incoming.getName());
+        recipe.setPrepTime(incoming.getPrepTime());
+        recipe.setMealType(incoming.getMealType());
+        recipe.setCookTime(incoming.getCookTime());
+        recipe.setTotalCalories(incoming.getTotalCalories());
         recipesRepository.save(recipe);
         return recipe;
     }
