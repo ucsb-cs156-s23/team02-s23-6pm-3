@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RecipesRepository extends CrudRepository<Recipes, String> {
+public interface RecipesRepository extends CrudRepository<Recipes, Long> {
   Iterable<Recipes> findAllByName(String name);
 }

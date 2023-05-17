@@ -49,7 +49,7 @@ public class RecipesController extends ApiController {
         Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
-        return recipes;
+        return recipe;
     }
 
     @ApiOperation(value = "Create a new recipe")
@@ -57,10 +57,10 @@ public class RecipesController extends ApiController {
     @PostMapping("/post")
     public Recipes postRecipes(
             @ApiParam("name") @RequestParam String name,
-            @ApiParam("mealtype") @RequestParam String mealtype,
-            @ApiParam("preptime") @RequestParam String preptime,
-            @ApiParam("cooktime") @RequestParam String cooktime,
-            @ApiParam("totalcalories") @RequestParam String totalcalories
+            @ApiParam("mealType") @RequestParam String mealtype,
+            @ApiParam("prepTime") @RequestParam String preptime,
+            @ApiParam("cookTime") @RequestParam String cooktime,
+            @ApiParam("totalCalories") @RequestParam String totalcalories
             )
             throws JsonProcessingException {
 
