@@ -93,7 +93,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .totalCalories("450")
                                 .build();
 
-                when(recipesRepository.findById(eq(07))).thenReturn(Optional.of(rest));
+                when(recipeRepository.findById(eq(07))).thenReturn(Optional.of(okonomiyaki));
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recipes?code=07"))
@@ -101,8 +101,8 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(recipeRepository, times(1)).findById(eq(07));
-                String expectedJson = mapper.writeValueAsString(rest);
+                verify(recipeRepository, times(1)).findById(eq(07L));
+                String expectedJson = mapper.writeValueAsString(okonomiyaki);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -113,7 +113,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                when(recipeRepository.findById(eq(07))).thenReturn(Optional.empty());
+                when(recipeRepository.findById(eq(07L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recipes?code=07"))
@@ -121,7 +121,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(recipeRepository, times(1)).findById(eq(07));
+                verify(recipeRepository, times(1)).findById(eq(07L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
                 assertEquals("Recipes with id 07 not found", json.get("message"));
@@ -207,7 +207,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .totalCalories("400")
                                 .build();
 
-                when(recipeRepository.findById(eq(66))).thenReturn(Optional.of(gyudon));
+                when(recipeRepository.findById(eq(66L))).thenReturn(Optional.of(gyudon));
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -216,11 +216,11 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(recipeRepository, times(1)).findById(66);
+                verify(recipeRepository, times(1)).findById(66L);
                 verify(recipeRepository, times(1)).delete(any());
 
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Recipes with id 66 deleted", json.get("message"));
+                assertEquals("Recipes with id 66L deleted", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
@@ -229,7 +229,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                         throws Exception {
                 // arrange
 
-                when(recipeRepository.findById(eq(66))).thenReturn(Optional.empty());
+                when(recipeRepository.findById(eq(66L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -238,7 +238,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(recipeRepository, times(1)).findById(66);
+                verify(recipeRepository, times(1)).findById(66L);
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("Recipes with id 66 not found", json.get("message"));
         }
@@ -266,11 +266,11 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(gyudonEdited);
 
-                when(recipeRepository.findById(eq(662))).thenReturn(Optional.of(662));
+                when(recipeRepository.findById(eq(662L))).thenReturn(Optional.of(662L));
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/recipes?id=662")
+                                put("/api/recipes?id=662L")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
@@ -278,7 +278,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
-                verify(recipeRepository, times(1)).findById(662);
+                verify(recipeRepository, times(1)).findById(662L);
                 verify(recipeRepository, times(1)).save(gyudonEdited); // should be saved with updated info
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(requestBody, responseString);
@@ -300,7 +300,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(gyudonEdited);
 
-                when(recipeRepository.findById(eq(662))).thenReturn(Optional.empty());
+                when(recipeRepository.findById(eq(662L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(
@@ -312,7 +312,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
-                verify(recipeRepository, times(1)).findById(662);
+                verify(recipeRepository, times(1)).findById(662L);
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("Recipes with id 662 not found", json.get("message"));
 
