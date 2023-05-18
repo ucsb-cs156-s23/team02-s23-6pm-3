@@ -220,7 +220,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                 verify(recipeRepository, times(1)).delete(any());
 
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Recipes with id 66L deleted", json.get("message"));
+                assertEquals("Recipes with id 66 deleted", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
