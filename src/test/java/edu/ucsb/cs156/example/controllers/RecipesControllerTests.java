@@ -93,7 +93,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .totalCalories("450")
                                 .build();
 
-                when(recipeRepository.findById(eq(07))).thenReturn(Optional.of(okonomiyaki));
+                when(recipeRepository.findById(eq(07L))).thenReturn(Optional.of(okonomiyaki));
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recipes?code=07"))
@@ -266,7 +266,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 String requestBody = mapper.writeValueAsString(gyudonEdited);
 
-                when(recipeRepository.findById(eq(662L))).thenReturn(Optional.of(662L));
+                when(recipeRepository.findById(eq(662L))).thenReturn(Optional.of(gyudon));
 
                 // act
                 MvcResult response = mockMvc.perform(
