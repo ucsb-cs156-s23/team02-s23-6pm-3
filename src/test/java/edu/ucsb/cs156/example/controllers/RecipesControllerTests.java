@@ -57,7 +57,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/recipes?id=gyudon"))
+                mockMvc.perform(get("/api/recipes?id=66"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 
@@ -87,10 +87,10 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 Recipes okonomiyaki = Recipes.builder()
                                 .name("Okonomiyaki")
-                                .mealtype("snack")
-                                .preptime("15m")
-                                .cooktime("10m")
-                                .totalcalories("450")
+                                .mealType("snack")
+                                .prepTime("15m")
+                                .cookTime("10m")
+                                .totalCalories("450")
                                 .build();
 
                 when(recipesRepository.findById(eq(07))).thenReturn(Optional.of(rest));
@@ -124,7 +124,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                 verify(recipeRepository, times(1)).findById(eq(07));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("Recipes with id Okonomiyaki not found", json.get("message"));
+                assertEquals("Recipes with id 07 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "USER" })
@@ -135,18 +135,18 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 Recipes okonomiyaki = Recipes.builder()
                                 .name("Okonomiyaki")
-                                .mealtype("snack")
-                                .preptime("15m")
-                                .cooktime("10m")
-                                .totalcalories("450")
+                                .mealType("snack")
+                                .prepTime("15m")
+                                .cookTime("10m")
+                                .totalCalories("450")
                                 .build();
 
                 Recipes frittata = Recipes.builder()
                                 .name("Frittata")
-                                .mealtype("breakfast")
-                                .preptime("30m")
-                                .cooktime("30m")
-                                .totalcalories("470")
+                                .mealType("breakfast")
+                                .prepTime("30m")
+                                .cookTime("30m")
+                                .totalCalories("470")
                                 .build();
 
                 ArrayList<Recipes> expectedRecipe = new ArrayList<>();
@@ -172,18 +172,18 @@ public class RecipesControllerTests extends ControllerTestCase {
                 // arrange
 
                 Recipes gyudon = Recipes.builder()
-                                .name("Beef Gyudon")
-                                .mealtype("dinner")
-                                .preptime("20m")
-                                .cooktime("30m")
-                                .totalcalories("400")
+                                .name("gyudon")
+                                .mealType("dinner")
+                                .prepTime("20m")
+                                .cookTime("30m")
+                                .totalCalories("400")
                                 .build();
 
                 when(recipeRepository.save(eq(gyudon))).thenReturn(gyudon);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/recipes/post?id=beefgyudon&mealtype=dinner&preptime=20m&cooktime=30m&totalcalories=400")
+                                post("/api/recipes/post?name=gyudon&mealType=dinner&prepTime=20m&cookTime=30m&totalCalories=400")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -201,10 +201,10 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 Recipes gyudon = Recipes.builder()
                                 .name("gyudon")
-                                .mealtype("dinner")
-                                .preptime("20m")
-                                .cooktime("30m")
-                                .totalcalories("400")
+                                .mealType("dinner")
+                                .prepTime("20m")
+                                .cookTime("30m")
+                                .totalCalories("400")
                                 .build();
 
                 when(recipeRepository.findById(eq(66))).thenReturn(Optional.of(gyudon));
@@ -220,7 +220,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                 verify(recipeRepository, times(1)).delete(any());
 
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Recipes with id BeefGyudon deleted", json.get("message"));
+                assertEquals("Recipes with id 66 deleted", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
@@ -240,7 +240,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                 // assert
                 verify(recipeRepository, times(1)).findById(66);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Recipes with id beefgyudon not found", json.get("message"));
+                assertEquals("Recipes with id 66 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
@@ -250,18 +250,18 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 Recipes gyudon = Recipes.builder()
                                 .name("gyudon")
-                                .mealtype("dinner")
-                                .preptime("20m")
-                                .cooktime("30m")
-                                .totalcalories("400")
+                                .mealType("dinner")
+                                .prepTime("20m")
+                                .cookTime("30m")
+                                .totalCalories("400")
                                 .build();
 
                 Recipes gyudonEdited = Recipes.builder()
                                 .name("gyudon")
-                                .mealtype("lunch")
-                                .preptime("20m")
-                                .cooktime("30m")
-                                .totalcalories("350")
+                                .mealType("lunch")
+                                .prepTime("20m")
+                                .cookTime("30m")
+                                .totalCalories("350")
                                 .build();
 
                 String requestBody = mapper.writeValueAsString(gyudonEdited);
@@ -291,10 +291,10 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 Recipes gyudonEdited = Recipes.builder()
                                 .name("gyudon")
-                                .mealtype("lunch")
-                                .preptime("20m")
-                                .cooktime("30m")
-                                .totalcalories("350")
+                                .mealType("lunch")
+                                .prepTime("20m")
+                                .cookTime("30m")
+                                .totalCalories("350")
                                 .build();
 
 
@@ -314,7 +314,7 @@ public class RecipesControllerTests extends ControllerTestCase {
                 // assert
                 verify(recipeRepository, times(1)).findById(662);
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("Recipes with id beefgyudon2 not found", json.get("message"));
+                assertEquals("Recipes with id 662 not found", json.get("message"));
 
         }
 }
