@@ -211,7 +211,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/recipes?id=66L")
+                                delete("/api/recipes?id=66")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -270,7 +270,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/recipes?id=662L")
+                                put("/api/recipes?id=662")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
