@@ -49,7 +49,7 @@ public class RecipesController extends ApiController {
         Recipes recipe = recipesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Recipes.class, id));
 
-        return recipes;
+        return recipe;
     }
 
     @ApiOperation(value = "Create a new recipe")
