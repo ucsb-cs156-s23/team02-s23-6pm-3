@@ -93,15 +93,15 @@ public class RecipesControllerTests extends ControllerTestCase {
                                 .totalCalories("450")
                                 .build();
 
-                when(recipeRepository.findById(eq(07L))).thenReturn(Optional.of(okonomiyaki));
+                when(recipeRepository.findById(eq(7L))).thenReturn(Optional.of(okonomiyaki));
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/recipes?code=07"))
+                MvcResult response = mockMvc.perform(get("/api/recipes?id=7"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
 
-                verify(recipeRepository, times(1)).findById(eq(07L));
+                verify(recipeRepository, times(1)).findById(eq(7L));
                 String expectedJson = mapper.writeValueAsString(okonomiyaki);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -113,18 +113,18 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                when(recipeRepository.findById(eq(07L))).thenReturn(Optional.empty());
+                when(recipeRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/recipes?code=07"))
+                MvcResult response = mockMvc.perform(get("/api/recipes?id=7"))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
 
-                verify(recipeRepository, times(1)).findById(eq(07L));
+                verify(recipeRepository, times(1)).findById(eq(7L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("Recipes with id 07 not found", json.get("message"));
+                assertEquals("Recipes with id 7 not found", json.get("message"));
         }
 
         @WithMockUser(roles = { "USER" })
@@ -211,7 +211,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/recipes?name=66")
+                                delete("/api/recipes?id=66L")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -304,7 +304,7 @@ public class RecipesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                put("/api/recipes?code=662")
+                                put("/api/recipes?id=662")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
                                                 .content(requestBody)
