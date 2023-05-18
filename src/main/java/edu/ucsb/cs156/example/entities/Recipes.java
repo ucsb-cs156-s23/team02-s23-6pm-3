@@ -20,8 +20,8 @@ public class Recipes {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String name;
-  private String mealtype;
-  private String preptime;  
-  private String cooktime; 
-  private String totalcalories; 
+  private String mealType;
+  private String prepTime;  
+  private String cookTime; 
+  private String totalCalories; 
 }
