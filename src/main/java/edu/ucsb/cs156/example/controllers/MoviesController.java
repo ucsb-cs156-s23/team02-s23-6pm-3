@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,81 +23,83 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+
 @Api(description = "Movies")
 @RequestMapping("/api/movies")
 @RestController
+@Slf4j
 public class MoviesController extends ApiController {
 
     @Autowired
     MoviesRepository moviesRepository;
 
-    @ApiOperation(value = "List all moviess")
+    @ApiOperation(value = "List all movies")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<Movies> allMovies() {
-        Iterable<Movies> dates = moviesRepository.findAll();
-        return dates;
+        Iterable<Movies> movie = moviesRepository.findAll();
+        return movie;
     }
 
-    @ApiOperation(value = "Get a single movies")
+    @ApiOperation(value = "Get a single movie")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
     public Movies getById(
             @ApiParam("id") @RequestParam Long id) {
-        Movies movies = moviesRepository.findById(id)
+        Movies movie = moviesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Movies.class, id));
 
-        return movies;
+        return movie;
     }
 
-    @ApiOperation(value = "Create a new movies")
+    @ApiOperation(value = "Create a new movie")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public Movies postMovies(
             @ApiParam("title") @RequestParam String title,
-            @ApiParam("starring") @RequestParam String starring,
-            @ApiParam("director") @RequestParam String director
+            @ApiParam("director") @RequestParam String director,
+            @ApiParam("year") @RequestParam int year,
+            @ApiParam("starringActors") @RequestParam String starringActors
             )
             throws JsonProcessingException {
 
-        Movies movies = new Movies();
-        movies.setTitle(title);
-        movies.setStarring(starring);
-        movies.setDirector(director);
+        Movies movie = new Movies();
+        movie.setTitle(title);
+        movie.setDirector(director);
+        movie.setYear(year);
+        movie.setStarringActors(straringActors);
 
-        Movies savedMovies = moviesRepository.save(movies);
+        Movies savedMovie = moviesRepository.save(movie);
 
-        return savedMovies;
+        return savedMovie;
     }
 
-    @ApiOperation(value = "Delete a Movies")
+    @ApiOperation(value = "Delete a Movie")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
-    public Object deleteMovies(
+    public Object deleteMovie(
             @ApiParam("id") @RequestParam Long id) {
-        Movies movies = moviesRepository.findById(id)
+        Movies movie = moviesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Movies.class, id));
 
-        moviesRepository.delete(movies);
+        moviesRepository.delete(movie);
         return genericMessage("Movies with id %s deleted".formatted(id));
     }
 
-    @ApiOperation(value = "Update a single movies")
+    @ApiOperation(value = "Update a single movie")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
-    public Movies updateMovies(
+    public Movies updateMovie(
             @ApiParam("id") @RequestParam Long id,
             @RequestBody @Valid Movies incoming) {
 
-        Movies movies = moviesRepository.findById(id)
+        Movies movie = moviesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Movies.class, id));
-
-        movies.setTitle(incoming.getTitle());
-        movies.setStarring(incoming.getStarring());
-        movies.setDirector(incoming.getDirector());
-
-        moviesRepository.save(movies);
-
-        return movies;
+        movie.setTitle(incoming.getTitle());
+        movie.setDirector(incoming.getDirector());
+        movie.setYear(incoming.getYear());
+        movie.setStarringActors(incoming.getStarringActors());
+        moviesRepository.save(movie);
+        return movie;
     }
 }

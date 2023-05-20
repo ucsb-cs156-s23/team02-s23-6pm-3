@@ -20,6 +20,7 @@ public class Movies {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String title;
-  private String starring;
   private String director;
+  private int year;
+  private String starringActors;
 }

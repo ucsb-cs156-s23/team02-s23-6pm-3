@@ -85,9 +85,10 @@ public class MoviesControllerTests extends ControllerTestCase {
         @Test
         public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
                 Movies movies = Movies.builder()
-                                .title("Title1")
-                                .starring("Starring1")
-                                .director("Director1")
+                                .title("Top Gun: Maverick")
+                                .director("Joseph Kosinski")
+                                .year(2022)
+                                .starringActors("Tom Cruise")
                                 .build();
 
                 when(moviesRepository.findById(eq(7L))).thenReturn(Optional.of(movies));
@@ -130,15 +131,17 @@ public class MoviesControllerTests extends ControllerTestCase {
 
                 // arrange
                 Movies movies1 = Movies.builder()
-                                .title("Title1")
-                                .starring("Starring1")
-                                .director("Director1")
+                                .title("Top Gun: Maverick")
+                                .director("Joseph Kosinski")
+                                .year(2022)
+                                .starringActors("Tom Cruise")
                                 .build();
 
                 Movies movies2 = Movies.builder()
-                                .title("Title2")
-                                .starring("Starring2")
-                                .director("Director2")
+                                .title("No Time to Die")
+                                .director("Cary Joji Fukunaga")
+                                .year(2021)
+                                .starringActors("Daniel Craig")
                                 .build();
 
                 ArrayList<Movies> expectedDates = new ArrayList<>();
@@ -163,16 +166,17 @@ public class MoviesControllerTests extends ControllerTestCase {
         public void an_admin_user_can_post_a_new_movies() throws Exception {
                 // arrange
                 Movies movies1 = Movies.builder()
-                                .title("Title1")
-                                .starring("Starring1")
-                                .director("Director1")
+                                .title("Top Gun: Maverick")
+                                .director("Joseph Kosinski")
+                                .year(2022)
+                                .starringActors("Tom Cruise")
                                 .build();
 
                 when(moviesRepository.save(eq(movies1))).thenReturn(movies1);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/movies/post?title=Title1&starring=Starring1&director=Director1")
+                                post("/api/movies/post?title=Title1&image=Image1&content=Content1")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
@@ -188,9 +192,10 @@ public class MoviesControllerTests extends ControllerTestCase {
         public void admin_can_delete_a_date() throws Exception {
                 // arrange
                 Movies movies1 = Movies.builder()
-                                .title("Title1")
-                                .starring("Starring1")
-                                .director("Director1")
+                                .title("Top Gun: Maverick")
+                                .director("Joseph Kosinski")
+                                .year(2022)
+                                .starringActors("Tom Cruise")
                                 .build();
 
                 when(moviesRepository.findById(eq(15L))).thenReturn(Optional.of(movies1));
@@ -234,15 +239,16 @@ public class MoviesControllerTests extends ControllerTestCase {
         public void admin_can_edit_an_existing_movies() throws Exception {
                 // arrange
                 Movies moviesOrig = Movies.builder()
-                                .title("Title1")
-                                .starring("Starring1")
-                                .director("Director1")
+                                .title("Top Gun: Maverick")
+                                .director("Joseph Kosinski")
+                                .year(2022)
+                                .starringActors("Tom Cruise")
                                 .build();
 
                 Movies moviesEdited = Movies.builder()
                                 .title("Asia")
-                                .starring("Starring1ro")
-                                .director("Asiatotoro")
+                                .image("Image1ro")
+                                .content("Asiatotoro")
                                 .build();
 
                 String requestBody = mapper.writeValueAsString(moviesEdited);
@@ -272,8 +278,8 @@ public class MoviesControllerTests extends ControllerTestCase {
 
                 Movies moviesEdited = Movies.builder()
                                 .title("Asia")
-                                .starring("Starring1ro")
-                                .director("Asiatotoro")
+                                .image("Image1ro")
+                                .content("Asiatotoro")
                                 .build();
 
                 String requestBody = mapper.writeValueAsString(moviesEdited);
